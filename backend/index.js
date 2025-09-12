@@ -9,7 +9,7 @@ import authRoutes from './routes/auth.js';
 import tradeRoutes from './routes/trade.js';
 import pricesRoutes from './routes/prices.js';
 import { startPriceUpdates, getPrices } from './services/priceService.js';
-import WebSocket from 'ws';
+import { WebSocketServer } from 'ws';
 
 const app = express();
 
@@ -32,7 +32,7 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 // Start price updates and WebSocket server
-const wss = new WebSocket.Server({ port: 8080 });
+const wss = new WebSocketServer({ port: 8080 });
 console.log('WebSocket server running on port 8080');
 
 wss.on('connection', (ws) => {
