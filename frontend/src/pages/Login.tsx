@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -37,6 +37,7 @@ const Login: React.FC = () => {
         navigate('/');
       } catch (error) {
         setErrors({ general: 'Login failed. Please check your credentials.' });
+        console.log(error);
       }
     }
   };

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 
 const Signup: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -37,6 +37,7 @@ const Signup: React.FC = () => {
         navigate('/');
       } catch (error) {
         setErrors({ general: 'Signup failed. Please try again.' });
+        console.error(error);
       }
     }
   };
