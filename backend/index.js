@@ -6,6 +6,7 @@ import { config } from 'dotenv';
 config();
 
 import authRoutes from './routes/auth.js';
+import tradeRoutes from './routes/trade.js';
 
 const app = express();
 
@@ -21,6 +22,7 @@ connect(process.env.MONGODB_URI, {
     .catch(err => console.log('MongoDB connection error:', err));
 
 app.use('/api/auth', authRoutes);
+app.use('/api/trade', tradeRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
