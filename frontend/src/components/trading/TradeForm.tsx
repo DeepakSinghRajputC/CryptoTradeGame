@@ -22,7 +22,8 @@ const TradeForm: React.FC = () => {
     const result = await executeTrade(coinSymbol, numAmount, type);
     if (result.success) {
       // Show success notification
-      const message = `${type.toUpperCase()} ${numAmount} ${coinSymbol.toUpperCase()} at $${result.price?.toFixed(2)} - Total: $${result.total?.toFixed(2)}`;
+      const action = type === 'buy' ? 'BOUGHT' : 'SOLD';
+      const message = `${action} ${numAmount} ${coinSymbol.toUpperCase()} at $${result.price?.toFixed(2)} - Total: $${result.total?.toFixed(2)}`;
       showNotification(message, 'success');
     } else {
       // Show error notification

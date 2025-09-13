@@ -23,8 +23,15 @@ const TransactionHistory: React.FC = () => {
           <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
             {transactions.map((tx: Transaction, index: number) => (
               <tr key={index} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
-                <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">
-                  {tx.coinSymbol.toUpperCase()}
+                <td className="px-4 py-4 whitespace-nowrap">
+                  <div className="flex items-center">
+                    <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">
+                      {tx.coinSymbol.charAt(0).toUpperCase()}
+                    </div>
+                    <span className="text-sm font-medium text-gray-900 dark:text-white">
+                      {tx.coinSymbol.toUpperCase()}
+                    </span>
+                  </div>
                 </td>
                 <td className={`px-4 py-4 whitespace-nowrap text-sm font-semibold ${
                   tx.type === 'buy' ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'
