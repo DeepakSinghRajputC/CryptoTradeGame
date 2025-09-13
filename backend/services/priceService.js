@@ -84,13 +84,34 @@ async function fetchPrices(wss) {
 
     const data = await response.json();
 
-    // Map CMC data to our format
+    // Find Bitcoin price as base
+    const bitcoinData = data.data.find(coin => coin.symbol === 'BTC');
+    if (!bitcoinData) {
+      throw new Error('Bitcoin price not found in CMC response');
+    }
+
+    const basePrice = bitcoinData.quote.USD.price;
+
+    // Simulate other coins based on Bitcoin price with volatility
     const prices = {};
-    data.data.forEach(coin => {
-      const coinName = COIN_MAPPING[coin.symbol];
-      if (coinName) {
-        prices[coinName] = { usd: coin.quote.USD.price };
-      }
+    prices.bitcoin = { usd: basePrice };
+
+    // Ethereum: ~15-20% of Bitcoin price
+    prices.ethereum = { usd: basePrice * (0.15 + Math.random() * 0.05) };
+
+    // Tether: Stable around $1
+    prices.tether = { usd: 1 + (Math.random() - 0.5) * 0.01 };
+
+    // Binance Coin: ~2-3% of Bitcoin price
+    prices.binancecoin = { usd: basePrice * (0.02 + Math.random() * 0.01) };
+
+    // Cardano: ~0.3-0.5% of Bitcoin price
+    prices.cardano = { usd: basePrice * (0.003 + Math.random() * 0.002) };
+
+    // Add some volatility to all prices
+    Object.keys(prices).forEach(coin => {
+      const volatility = 0.02; // 2% volatility
+      prices[coin].usd *= (1 + (Math.random() - 0.5) * volatility);
     });
 
     // Update cache

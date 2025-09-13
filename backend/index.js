@@ -40,6 +40,17 @@ wss.on('connection', (ws) => {
   // Send current prices on connection
   ws.send(JSON.stringify(getPrices()));
 
+  ws.on('message', (message) => {
+    try {
+      const data = JSON.parse(message.toString());
+      if (data.type === 'ping') {
+        ws.send(JSON.stringify({ type: 'pong' }));
+      }
+    } catch (error) {
+      console.error('Error parsing WebSocket message:', error);
+    }
+  });
+
   ws.on('close', () => {
     console.log('WebSocket client disconnected');
   });

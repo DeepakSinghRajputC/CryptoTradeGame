@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import api from '../utils/api';
 import { TradingContext } from './TradingContextValue';
-import type { Transaction } from './TradingContextValue';
+import type { Transaction, NotificationItem } from './TradingContextValue';
 
 // interface Holding {
 //   coinSymbol: string;
@@ -63,6 +62,7 @@ export const TradingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   ]);
 
   const [openOrders, setOpenOrders] = useState<OpenOrder[]>([]);
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -97,42 +97,98 @@ export const TradingProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const executeTrade = async (coinSymbol: string, amount: number, type: 'buy' | 'sell') => {
     setLoading(true);
     setError(null);
+
     try {
-      await api.post(`/api/trade/${type}`, { coinSymbol, amount, price: prices.prices[coinSymbol]?.usd || 0 });
-      // Update local state based on response or mock
-      const newTransaction: Transaction = {
+      const currentPrice = prices.prices[coinSymbol]?.usd || 0;
+      const totalCost = amount * currentPrice;
+
+      if (type === 'buy') {
+        // Check if user has enough balance
+        if (portfolio.balance < totalCost) {
+          throw new Error('Insufficient balance');
+        }
+
+        // Update portfolio
+        const existingHolding = portfolio.holdings.find(h => h.coinSymbol === coinSymbol);
+        let newHoldings;
+
+        if (existingHolding) {
+          // Update existing holding
+          const totalAmount = existingHolding.amount + amount;
+          const totalCostBasis = (existingHolding.amount * existingHolding.averagePrice) + totalCost;
+          const newAveragePrice = totalCostBasis / totalAmount;
+
+          newHoldings = portfolio.holdings.map(h =>
+            h.coinSymbol === coinSymbol
+              ? { ...h, amount: totalAmount, averagePrice: newAveragePrice }
+              : h
+          );
+        } else {
+          // Add new holding
+          newHoldings = [...portfolio.holdings, {
+            coinSymbol,
+            amount,
+            averagePrice: currentPrice
+          }];
+        }
+
+        setPortfolio({
+          balance: portfolio.balance - totalCost,
+          holdings: newHoldings
+        });
+
+      } else if (type === 'sell') {
+        // Check if user has enough coins
+        const existingHolding = portfolio.holdings.find(h => h.coinSymbol === coinSymbol);
+        if (!existingHolding || existingHolding.amount < amount) {
+          throw new Error('Insufficient holdings');
+        }
+
+        // Update portfolio
+        let newHoldings;
+        if (existingHolding.amount === amount) {
+          // Remove holding completely
+          newHoldings = portfolio.holdings.filter(h => h.coinSymbol !== coinSymbol);
+        } else {
+          // Reduce holding amount
+          newHoldings = portfolio.holdings.map(h =>
+            h.coinSymbol === coinSymbol
+              ? { ...h, amount: h.amount - amount }
+              : h
+          );
+        }
+
+        setPortfolio({
+          balance: portfolio.balance + totalCost,
+          holdings: newHoldings
+        });
+      }
+
+      // Create transaction record
+      const transaction: Transaction = {
         coinSymbol,
         amount,
         type,
-        price: prices.prices[coinSymbol]?.usd || 0,
-        timestamp: new Date().toISOString(),
+        price: currentPrice,
+        timestamp: new Date().toISOString()
       };
-      setTransactions(prev => [newTransaction, ...prev]);
 
-      // Update portfolio mock
-      if (type === 'buy') {
-        setPortfolio(prev => ({
-          ...prev,
-          balance: prev.balance - (amount * (prices.prices[coinSymbol]?.usd || 0)),
-          holdings: prev.holdings.map(h =>
-            h.coinSymbol === coinSymbol
-              ? { ...h, amount: h.amount + amount, averagePrice: (h.amount * h.averagePrice + amount * (prices.prices[coinSymbol]?.usd || 0)) / (h.amount + amount) }
-              : h
-          ).concat(prev.holdings.some(h => h.coinSymbol === coinSymbol) ? [] : [{ coinSymbol, amount, averagePrice: prices.prices[coinSymbol]?.usd || 0 }]),
-        }));
-      } else {
-        setPortfolio(prev => ({
-          ...prev,
-          balance: prev.balance + (amount * (prices.prices[coinSymbol]?.usd || 0)),
-          holdings: prev.holdings.map(h =>
-            h.coinSymbol === coinSymbol
-              ? { ...h, amount: Math.max(0, h.amount - amount) }
-              : h
-          ).filter(h => h.amount > 0),
-        }));
-      }
-    } catch {
-      setError('Trade execution failed');
+      setTransactions(prev => [transaction, ...prev]);
+
+      // Return trade result for notifications
+      return {
+        success: true,
+        type,
+        coinSymbol,
+        amount,
+        price: currentPrice,
+        total: totalCost
+      };
+
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Trade execution failed';
+      setError(errorMessage);
+      return { success: false, error: errorMessage };
     } finally {
       setLoading(false);
     }
@@ -161,12 +217,30 @@ export const TradingProvider: React.FC<{ children: React.ReactNode }> = ({ child
     // For now, do nothing
   };
 
+  const showNotification = (message: string, type: 'success' | 'error' | 'info') => {
+    const notification: NotificationItem = {
+      id: Date.now().toString(),
+      message,
+      type,
+    };
+    setNotifications(prev => [...prev, notification]);
+  };
+
+  const updateTransactions = (newTransactions: Transaction[]) => {
+    setTransactions(newTransactions);
+  };
+
+  const removeNotification = (id: string) => {
+    setNotifications(prev => prev.filter(n => n.id !== id));
+  };
+
   return (
     <TradingContext.Provider value={{
       prices,
       portfolio,
       transactions,
       openOrders,
+      notifications,
       loading,
       error,
       updatePrices,
@@ -175,6 +249,9 @@ export const TradingProvider: React.FC<{ children: React.ReactNode }> = ({ child
       removeOpenOrder,
       refreshPortfolio,
       refreshTransactions,
+      setTransactions: updateTransactions,
+      showNotification,
+      removeNotification,
     }}>
       {children}
     </TradingContext.Provider>

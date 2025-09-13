@@ -1,0 +1,13 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <circle cx="16" cy="16" r="16" fill="#1e40af"/>
+
+  <!-- Bitcoin symbol -->
+  <path d="M12 10.5h2.5c.276 0 .5.224.5.5v1c0 .276-.224.5-.5.5H13v1h1.5c.276 0 .5.224.5.5v1c0 .276-.224.5-.5.5H12v1h3c.552 0 1 .448 1 1s-.448 1-1 1h-1.5v1h-1v-1H10v-1h1v-1H9.5c-.276 0-.5-.224-.5-.5v-1c0-.276.224-.5.5-.5H11v-1H9.5c-.276 0-.5-.224-.5-.5v-1c0-.276.224-.5.5-.5H12v-1z" fill="white"/>
+
+  <!-- Ethereum diamond -->
+  <polygon points="20,8 24,12 20,16 16,12" fill="white" opacity="0.8"/>
+
+  <!-- Trading chart line -->
+  <path d="M8 20 L12 16 L16 18 L20 14 L24 16" stroke="white" stroke-width="1.5" fill="none" opacity="0.6"/>
+</svg>
