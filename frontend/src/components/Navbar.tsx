@@ -6,7 +6,7 @@ const Navbar: React.FC = () => {
   const { isAuthenticated, logout } = useAuth();
 
   return (
-    <header className="bg-blue-600 dark:bg-gray-800 text-white p-4 shadow-lg">
+    <header className="bg-gray-900 text-white p-4 shadow-lg border-b border-gray-700">
       <nav className="container mx-auto flex justify-between items-center">
         <Link to="/" className="flex items-center space-x-2 text-xl font-bold hover:text-blue-200 dark:hover:text-blue-300 transition-colors">
           <img src="/crypto-logo.svg" alt="CryptoTradeGame Logo" className="w-8 h-8" />

@@ -2,12 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { TradingContext } from './TradingContextValue';
 import type { Transaction, NotificationItem } from './TradingContextValue';
 
-// interface Holding {
-//   coinSymbol: string;
-//   amount: number;
-//   averagePrice: number;
-// }
-
 interface OpenOrder {
   id: string;
   coinSymbol: string;
