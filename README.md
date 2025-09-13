@@ -2,6 +2,15 @@
 
 A comprehensive crypto trading simulator built with modern web technologies. Practice trading cryptocurrencies with virtual money, track your portfolio performance, and analyze market trends through interactive charts.
 
+## 🎥 Demo Video
+
+<!-- markdownlint-disable MD033 -->
+<video width="100%" controls>
+  <source src="./frontend/public/FinalResults.mp4" type="video/mp4">
+  Your browser does not support the video tag. Please watch the video directly from the repository or click [here](./frontend/public/FinalResults.mp4).
+</video>
+<!-- markdownlint-enable MD033 -->
+
 ## 🚀 Features
 
 ### Core Trading Features
@@ -59,60 +68,24 @@ A comprehensive crypto trading simulator built with modern web technologies. Pra
 
 ```bash
 CryptoTradeGame/
+│
 ├── backend/
-│   ├── middleware/
-│   │   └── auth.js
+│   ├── middleware/  
 │   ├── models/
-│   │   ├── User.js
-│   │   ├── Transaction.js
-│   │   ├── Portfolio.js
-│   │   └── Leaderboard.js
 │   ├── routes/
-│   │   ├── auth.js
-│   │   ├── trade.js
-│   │   └── prices.js
 │   ├── services/
-│   │   └── priceService.js
-│   ├── index.js
-│   ├── package.json
-│   └── .env
+│   │ 
 ├── frontend/
 │   ├── public/
 │   ├── src/
 │   │   ├── components/
 │   │   │   ├── trading/
-│   │   │   │   ├── TradeForm.tsx
-│   │   │   │   ├── PortfolioSummary.tsx
-│   │   │   │   ├── PriceChart.tsx
-│   │   │   │   ├── PortfolioChart.tsx
-│   │   │   │   └── TransactionHistory.tsx
-│   │   │   ├── Layout.tsx
-│   │   │   ├── Navbar.tsx
-│   │   │   ├── Footer.tsx
-│   │   │   └── ProtectedRoute.tsx
-│   │   ├── contexts/
-│   │   │   ├── AuthContext.tsx
-│   │   │   ├── AuthContextValue.tsx
-│   │   │   ├── TradingContext.tsx
-│   │   │   └── TradingContextValue.tsx
+│   │   ├── contexts/  
 │   │   ├── hooks/
-│   │   │   ├── useAuth.ts
-│   │   │   ├── useTrading.ts
-│   │   │   └── useWebSocketPrices.ts
-│   │   ├── pages/
-│   │   │   ├── Home.tsx
-│   │   │   ├── Login.tsx
-│   │   │   └── Signup.tsx
-│   │   ├── utils/
-│   │   │   └── api.ts
+│   │   ├── pages/  
+│   │   ├── utils/ 
 │   │   ├── App.tsx
 │   │   └── main.tsx
-│   ├── package.json
-│   ├── tailwind.config.js
-│   ├── tsconfig.json
-│   └── .env
-├── README.md
-└── LICENSE
 ```
 
 ## 🚀 Getting Started
@@ -128,8 +101,8 @@ CryptoTradeGame/
 1. **Clone the repository**
 
     ```bash
-    git clone https://github.com/yourusername/crypto-trade-game.git
-    cd crypto-trade-game
+    git clone https://github.com/DeepakSinghRajputC/CryptoTradeGame.git
+    cd CryptoTradeGame
     ```
 
 2. **Backend Setup**
@@ -236,7 +209,6 @@ CMC_API_KEY=your-coinmarketcap-api-key
 VITE_API_BASE_URL=http://localhost:5000
 ```
 
-
 ## 🎯 Usage
 
 1. **Sign Up/Login**: Create an account or login with existing credentials
@@ -244,7 +216,6 @@ VITE_API_BASE_URL=http://localhost:5000
 3. **Trade**: Use the trade form to buy/sell cryptocurrencies
 4. **Monitor Performance**: Track your P&L and portfolio value
 5. **Analyze Charts**: Use price charts to make informed trading decisions
-
 
 ## 📝 License
 
@@ -255,3 +226,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - CoinMarketCap for providing cryptocurrency data
 - React and Vite communities for excellent documentation
 - Tailwind CSS for beautiful styling utilities
+
+---

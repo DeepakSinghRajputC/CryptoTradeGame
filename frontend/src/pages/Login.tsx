@@ -40,9 +40,15 @@ const Login: React.FC = () => {
         await login(email, password);
         showNotification('Welcome back! You have successfully logged in.', 'success');
         navigate('/');
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error('Login error:', error);
-        const errorMessage = error?.response?.data?.message || 'Login failed. Please check your credentials and try again.';
+        let errorMessage = 'Login failed. Please check your credentials and try again.';
+
+        if (error instanceof Error && 'response' in error) {
+          const axiosError = error as { response?: { data?: { message?: string } } };
+          errorMessage = axiosError.response?.data?.message || errorMessage;
+        }
+
         setErrors({ general: errorMessage });
         showNotification(errorMessage, 'error');
       } finally {

@@ -44,9 +44,15 @@ const Signup: React.FC = () => {
         await signup(email, password);
         showNotification('Account created successfully! Welcome to CryptoTradeGame.', 'success');
         navigate('/');
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error('Signup error:', error);
-        const errorMessage = error?.response?.data?.message || 'Signup failed. Please try again.';
+        let errorMessage = 'Signup failed. Please try again.';
+
+        if (error instanceof Error && 'response' in error) {
+          const axiosError = error as { response?: { data?: { message?: string } } };
+          errorMessage = axiosError.response?.data?.message || errorMessage;
+        }
+
         setErrors({ general: errorMessage });
         showNotification(errorMessage, 'error');
       } finally {
