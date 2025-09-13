@@ -4,7 +4,7 @@ A comprehensive crypto trading simulator built with modern web technologies. Pra
 
 ## 🎥 Demo Video
 
-[Watch Demo Video](./frontend/public/FinalResults.mp4)
+[<!-- Uploading "FinalResults (2).mp4"... -->](https://github.com/user-attachments/assets/9a2f3090-b845-4691-8ae6-c940971a03f5)
 
 ## 🚀 Features
 
